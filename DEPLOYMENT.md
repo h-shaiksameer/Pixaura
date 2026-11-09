@@ -2,7 +2,7 @@
 
 ## Before connecting the domain
 
-1. Add the required variables to `.env.local` for local testing, or add the same variables in Vercel Project Settings > Environment Variables.
+1. Add the optional branding variables to `.env.local` for local testing, or add the same variables in Vercel Project Settings > Environment Variables. The app has safe defaults, so a missing variable will not crash the public site.
 2. Set `NEXT_PUBLIC_SITE_NAME` to the final public brand.
 3. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS URL, without a trailing slash.
 4. Set `NEXT_PUBLIC_CONTACT_EMAIL` to the support email for the domain.

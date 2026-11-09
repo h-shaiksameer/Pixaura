@@ -43,4 +43,4 @@ Pixaura is designed for creators, students, small businesses, developers, and an
 
 ## Brand configuration
 
-The public brand name, URL, contact email, description, copyright year, advertising ID, and analytics ID are read from environment variables. Add them to `.env.local` for local work or to your hosting provider's environment-variable settings. After changing them, restart the development server or redeploy so Next.js rebuilds the public pages.
+The public brand name, URL, contact email, description, copyright year, advertising ID, and analytics ID are read from environment variables when provided. Add them to `.env.local` for local work or to your hosting provider's environment-variable settings. Safe defaults keep the site available if a variable is missing. After changing them, restart the development server or redeploy so Next.js rebuilds the public pages.
