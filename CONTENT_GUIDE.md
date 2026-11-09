@@ -28,4 +28,4 @@ Do not claim unlimited processing, guaranteed quality, permanent privacy guarant
 
 ## Launch details to update
 
-Change the site URL, public brand name, support email, analytics ID, and advertising ID in the environment variables described by `.env.example`. Update the legal pages with the final business and contact details before publishing ads.
+Change the site URL, public brand name, support email, analytics ID, and advertising ID in `.env.local` locally or in the hosting provider's environment-variable settings. Update the legal pages with the final business and contact details before publishing ads.

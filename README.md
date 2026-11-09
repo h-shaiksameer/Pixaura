@@ -40,3 +40,7 @@ Whether you are preparing an application signature, optimizing website assets, c
 - [Contact](./app/contact/page.tsx)
 
 Pixaura is designed for creators, students, small businesses, developers, and anyone who needs a reliable image result without a complicated editor.
+
+## Brand configuration
+
+The public brand name, URL, contact email, description, copyright year, advertising ID, and analytics ID are read from environment variables. Add them to `.env.local` for local work or to your hosting provider's environment-variable settings. After changing them, restart the development server or redeploy so Next.js rebuilds the public pages.
