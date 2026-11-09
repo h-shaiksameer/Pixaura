@@ -10,6 +10,21 @@ function encoder(image: Sharp, format: OutputFormat, quality: number) {
   return image.tiff({ quality, compression: "jpeg" });
 }
 
+async function applyBackground(image: Sharp, color: string, replaceLightBackground: boolean) {
+  const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  if (replaceLightBackground) {
+    for (let i = 0; i < data.length; i += 4) {
+      const lightness = Math.min(data[i], data[i + 1], data[i + 2]);
+      const detectedAlpha = lightness >= 245 ? 0 : lightness <= 210 ? 255 : Math.round((245 - lightness) * 255 / 35);
+      data[i + 3] = Math.min(data[i + 3], detectedAlpha);
+    }
+  }
+  const background = await sharp({
+    create: { width: info.width, height: info.height, channels: 4, background: color }
+  }).composite([{ input: data, raw: { width: info.width, height: info.height, channels: 4 } }]).png().toBuffer();
+  return sharp(background);
+}
+
 export async function processImage(input: Buffer, settings: ProcessSettings) {
   validateSettings(settings);
   const source = sharp(input, { limitInputPixels: MAX_PIXELS, animated: false });
@@ -29,7 +44,9 @@ export async function processImage(input: Buffer, settings: ProcessSettings) {
   const fit: "contain" | "cover" | "fill" = strictDimensions ? "fill" : settings.resizeMode === "fit" ? "contain" : settings.resizeMode === "fill" ? "cover" : "fill";
   const resize = width || height ? { width, height, fit, withoutEnlargement: !strictDimensions } : undefined;
   const base = resize ? source.resize(resize) : source;
-  const flattened = settings.format === "jpeg" && settings.background ? base.flatten({ background: settings.background }) : base;
+  const shouldReplaceLightBackground = settings.background.toLowerCase() !== "#ffffff";
+  const prepared = settings.background ? await applyBackground(base, settings.background, shouldReplaceLightBackground) : base;
+  const flattened = settings.format === "jpeg" ? prepared.flatten({ background: settings.background || "#ffffff" }) : prepared;
   const target = settings.targetBytes;
   let quality = settings.compressionMode === "target" && target ? 100 : settings.quality;
   let output = await encoder(flattened, settings.format, quality).toBuffer();
